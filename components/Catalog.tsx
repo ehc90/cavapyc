@@ -6,7 +6,6 @@ import { db } from '@/lib/firebase';
 import { WineItem } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Star, Wine, Search, Filter } from 'lucide-react';
-import Image from 'next/image';
 
 const categories = [
     { id: 'todos', label: 'Todos' },
@@ -55,8 +54,8 @@ export default function Catalog() {
                                 key={cat.id}
                                 onClick={() => setFilter(cat.id)}
                                 className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${filter === cat.id
-                                        ? 'bg-amber-700 text-white shadow-lg shadow-amber-900/20'
-                                        : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                                    ? 'bg-amber-700 text-white shadow-lg shadow-amber-900/20'
+                                    : 'text-slate-400 hover:text-white hover:bg-slate-800'
                                     }`}
                             >
                                 {cat.label}
