@@ -9,6 +9,13 @@ import { Plus, Edit2, Trash2, Save, X, Sparkles, LogOut, Wine } from 'lucide-rea
 
 export default function AdminDashboard() {
     const router = useRouter();
+    const [items, setItems] = useState<WineItem[]>([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [aiLoading, setAiLoading] = useState(false);
+    const [formData, setFormData] = useState<Partial<WineItem>>({});
+
+    // Tab State
     const [activeTab, setActiveTab] = useState<'wines' | 'members'>('wines');
     const [members, setMembers] = useState<any[]>([]);
 
