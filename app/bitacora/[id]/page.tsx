@@ -2,17 +2,19 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, increment } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { BlogPost } from '@/types';
 import Link from 'next/link';
-import { ArrowLeft, Calendar, Share2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Share2, Wine } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function BlogPostPage() {
     const { id } = useParams();
     const [post, setPost] = useState<BlogPost | null>(null);
     const [loading, setLoading] = useState(true);
+    const [likes, setLikes] = useState(0);
+    const [hasLiked, setHasLiked] = useState(false);
 
     useEffect(() => {
         if (!id) return;
@@ -20,12 +22,49 @@ export default function BlogPostPage() {
             const docRef = doc(db, 'blog_posts', id as string);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
-                setPost({ id: docSnap.id, ...docSnap.data() } as BlogPost);
+                const data = docSnap.data();
+                setPost({ id: docSnap.id, ...data } as BlogPost);
+                setLikes(data.likes || 0);
             }
             setLoading(false);
         };
         fetchPost();
+
+        // Check local storage for like status
+        if (localStorage.getItem(`liked_${id}`)) setHasLiked(true);
     }, [id]);
+
+    const handleLike = async () => {
+        if (hasLiked || !post) return;
+
+        // Optimistic UI update
+        setLikes(prev => prev + 1);
+        setHasLiked(true);
+        localStorage.setItem(`liked_${post.id}`, 'true');
+
+        // Firestore update
+        const docRef = doc(db, 'blog_posts', post.id);
+        await updateDoc(docRef, { likes: increment(1) });
+    };
+
+    const handleShare = async () => {
+        const shareData = {
+            title: post?.title,
+            text: `Lee esta crónica de El Príncipe: ${post?.title}`,
+            url: window.location.href
+        };
+
+        if (navigator.share) {
+            try {
+                await navigator.share(shareData);
+            } catch (err) {
+                console.log('Error sharing:', err);
+            }
+        } else {
+            navigator.clipboard.writeText(window.location.href);
+            alert('¡Enlace copiado al portapapeles!');
+        }
+    };
 
     if (loading) return <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center"><div className="animate-spin w-8 h-8 border-b-2 border-amber-600 rounded-full"></div></div>;
     if (!post) return <div className="min-h-screen bg-[#FDFBF7] flex items-center justify-center text-slate-500">Entrada no encontrada.</div>;
@@ -76,11 +115,24 @@ export default function BlogPostPage() {
                         ))}
                     </div>
 
-                    <div className="mt-12 pt-8 border-t border-slate-200 flex justify-between items-center text-slate-400 text-sm font-sans">
-                        <span>Escrito por El Príncipe</span>
-                        <button className="flex items-center gap-2 hover:text-amber-600 transition-colors">
-                            <Share2 className="w-4 h-4" /> Compartir
-                        </button>
+                    <div className="mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6 text-slate-400 text-sm font-sans">
+                        <span className="italic">Escrito por El Príncipe</span>
+
+                        <div className="flex gap-4">
+                            <button
+                                onClick={handleLike}
+                                disabled={hasLiked}
+                                className={`flex items-center gap-2 px-4 py-2 rounded-full border transition-all ${hasLiked ? 'bg-amber-100 text-amber-700 border-amber-200 cursor-default' : 'hover:bg-amber-50 text-slate-500 border-slate-200 hover:text-amber-600'}`}
+                            >
+                                <Wine className={`w-5 h-5 ${hasLiked ? 'fill-current' : ''}`} />
+                                <span className="font-bold">{hasLiked ? '¡Salud!' : 'Brindar'}</span>
+                                {likes > 0 && <span className="ml-1 opacity-70">({likes})</span>}
+                            </button>
+
+                            <button onClick={handleShare} className="flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors">
+                                <Share2 className="w-5 h-5" /> Compartir
+                            </button>
+                        </div>
                     </div>
                 </motion.div>
             </div>
