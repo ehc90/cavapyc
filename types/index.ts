@@ -14,3 +14,14 @@ export interface WineItem {
     pairing?: string;
     createdAt?: any;
 }
+
+export interface BlogPost {
+    id: string;
+    title: string;
+    content: string;
+    image: string;
+    date: Date | any;
+    tags?: string[];
+    slug?: string;
+    createdAt?: Date | any;
+}

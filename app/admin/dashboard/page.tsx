@@ -34,9 +34,16 @@ export default function AdminDashboard() {
             setMembers(snap.docs.map(d => ({ id: d.id, ...d.data() })));
         });
 
+        // Subscribe to blog posts
+        const qPosts = query(collection(db, 'blog_posts'), orderBy('date', 'desc'));
+        const unsubPosts = onSnapshot(qPosts, (snap) => {
+            setPosts(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+        });
+
         return () => {
             unsubWines();
             unsubMembers();
+            unsubPosts();
         };
     }, [router]);
 
@@ -83,6 +90,41 @@ export default function AdminDashboard() {
     const handleDelete = async (id: string) => {
         if (confirm('¿Eliminar este vino definitivamente?')) {
             await deleteDoc(doc(db, 'cava_items', id));
+        }
+    };
+
+    // Blog Handlers
+    const openBlogModal = (post?: any) => {
+        if (post) {
+            setBlogFormData({ ...post, date: post.date?.toDate ? post.date.toDate().toISOString().split('T')[0] : post.date });
+        } else {
+            setBlogFormData({
+                title: '', content: '', image: '', tags: '', date: new Date().toISOString().split('T')[0]
+            });
+        }
+        setIsBlogModalOpen(true);
+    };
+
+    const handleBlogSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            const dataToSave = {
+                ...blogFormData,
+                date: new Date(blogFormData.date),
+                updatedAt: new Date()
+            };
+
+            if (blogFormData.id) {
+                await updateDoc(doc(db, 'blog_posts', blogFormData.id), dataToSave);
+            } else {
+                await addDoc(collection(db, 'blog_posts'), { ...dataToSave, createdAt: new Date() });
+            }
+            setIsBlogModalOpen(false);
+        } catch (err) {
+            alert('Error al guardar post: ' + err);
+        } finally {
+            setLoading(false);
         }
     };
 
