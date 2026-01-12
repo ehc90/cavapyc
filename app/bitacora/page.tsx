@@ -124,7 +124,7 @@ export default function BlogListing() {
 
             {/* Footer Simple */}
             <footer className="py-12 text-center border-t border-amber-900/10 mt-12">
-                <Link href="/" className="text-slate-400 hover:text-amber-600 transition-colors text-sm uppercase tracking-widest">
+                <Link href="/" className="inline-block px-8 py-3 border border-slate-300 rounded-full text-slate-500 hover:text-amber-700 hover:border-amber-700 hover:bg-amber-50 transition-all text-xs uppercase tracking-widest font-sans font-bold">
                     Volver a Príncipe y Centauro
                 </Link>
             </footer>
