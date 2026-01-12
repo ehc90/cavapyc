@@ -38,6 +38,7 @@ export default function Hero() {
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
+                        onClick={() => document.getElementById('collection')?.scrollIntoView({ behavior: 'smooth' })}
                         className="mt-8 px-8 py-3 bg-gradient-to-r from-amber-700 to-amber-900 rounded-full text-amber-50 font-medium tracking-wide shadow-lg shadow-amber-900/20 flex items-center gap-2 hover:shadow-amber-900/40 transition-shadow border border-amber-700/50"
                     >
                         Explorar Colección Privada <ArrowRight className="w-4 h-4" />
