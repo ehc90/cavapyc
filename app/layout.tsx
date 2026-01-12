@@ -49,11 +49,6 @@ export const metadata: Metadata = {
     description: 'Experiencias enológicas y crónicas de viaje.',
     images: ['https://tpoeahzwujcghqsjanon.supabase.co/storage/v1/object/public/ImagenPyC/PrincipePyC.jpg'],
   },
-  icons: {
-    icon: '/logo-hero.png',
-    shortcut: '/logo-hero.png',
-    apple: '/logo-hero.png',
-  },
   manifest: '/manifest.json'
 };
 
