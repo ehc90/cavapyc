@@ -7,7 +7,39 @@ import { db } from '@/lib/firebase';
 import { BlogPost, WineItem } from '@/types';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, Share2, Wine } from 'lucide-react';
+import { ArrowLeft, Calendar, Share2, Wine } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { Metadata } from 'next';
+
+type Props = {
+    params: { id: string }
+    searchParams: { [key: string]: string | string[] | undefined }
+}
+
+export async function generateMetadata(
+    { params }: Props,
+): Promise<Metadata> {
+    const id = params.id
+    const docRef = doc(db, 'blog_posts', id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        const post = docSnap.data();
+        return {
+            title: post.title,
+            description: post.content.substring(0, 160) + '...',
+            openGraph: {
+                title: post.title,
+                description: post.content.substring(0, 160) + '...',
+                images: [post.image || 'https://tpoeahzwujcghqsjanon.supabase.co/storage/v1/object/public/ImagenPyC/PrincipePyC.jpg'],
+            },
+        }
+    }
+
+    return {
+        title: 'Bitácora de Viaje',
+    }
+}
 
 export default function BlogPostPage() {
     const { id } = useParams();
