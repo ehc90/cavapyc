@@ -36,7 +36,7 @@ export default function Hero() {
                         <img
                             src="/logo-hero.png"
                             alt="Príncipe y Centauro Emblem"
-                            className="w-full h-full object-contain invert-[.9] brightness-125 sepia-[.2] hue-rotate-5 saturate-200" // Adjusting filters to make black logo look gold/white if needed, assumes logo is dark. 
+                            className="w-full h-full object-contain invert mix-blend-screen"
                         />
                     </div>
                 </motion.div>
