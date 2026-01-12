@@ -6,7 +6,7 @@ import { collection, query, orderBy, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { BlogPost } from '@/types';
 import { motion } from 'framer-motion';
-import { MapPin, Calendar, ArrowRight, Anchor } from 'lucide-react';
+import { MapPin, Calendar, ArrowRight, Anchor, Instagram, MessageCircle } from 'lucide-react';
 
 export default function BlogListing() {
     const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -52,9 +52,32 @@ export default function BlogListing() {
                     <h1 className="text-5xl md:text-7xl font-bold text-slate-900 mb-6 tracking-tight">
                         La Bitácora del Príncipe
                     </h1>
-                    <p className="max-w-3xl mx-auto text-xl text-slate-600 italic leading-relaxed">
+                    <p className="max-w-3xl mx-auto text-xl text-slate-600 italic leading-relaxed mb-8">
                         "Crónicas de un sommelier en movimiento. Desde los viñedos de Mendoza hasta los rincones más lejanos del mundo. Cada destino, una copa; cada bodega, una historia."
                     </p>
+
+                    {/* Social Icons */}
+                    <div className="flex justify-center gap-6">
+                        <a
+                            href="https://www.instagram.com/principeycentauro/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group p-3 bg-white rounded-full shadow-sm border border-slate-200 hover:shadow-md hover:border-amber-500/30 transition-all duration-500 hover:-translate-y-1"
+                            aria-label="Síguenos en Instagram"
+                        >
+                            <Instagram className="w-6 h-6 text-[#E1306C] grayscale group-hover:grayscale-0 group-active:grayscale-0 transition-all duration-500" />
+                        </a>
+
+                        <a
+                            href="https://wa.me/5492215545929"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group p-3 bg-white rounded-full shadow-sm border border-slate-200 hover:shadow-md hover:border-amber-500/30 transition-all duration-500 hover:-translate-y-1"
+                            aria-label="Contáctanos por WhatsApp"
+                        >
+                            <MessageCircle className="w-6 h-6 text-[#25D366] grayscale group-hover:grayscale-0 group-active:grayscale-0 transition-all duration-500" />
+                        </a>
+                    </div>
                 </motion.div>
             </header>
 
