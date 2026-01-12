@@ -63,7 +63,7 @@ export default function BodegaIudica() {
                             <img
                                 src="https://eldescorchediario.com/wp-content/uploads/2020/09/I%C3%BAdica-3.jpg"
                                 alt="Vinos Bodega Iúdica"
-                                className="w-full h-auto object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105"
+                                className="w-full h-auto object-cover grayscale group-hover:grayscale-0 group-active:grayscale-0 transition-all duration-700 scale-100 group-hover:scale-105"
                             />
                         </div>
 

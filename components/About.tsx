@@ -25,7 +25,7 @@ export default function About() {
                         <img
                             src="https://tpoeahzwujcghqsjanon.supabase.co/storage/v1/object/public/ImagenPyC/PrincipePyC.jpg"
                             alt="Emiliano - El Príncipe"
-                            className="w-full h-full object-cover object-[center_20%] grayscale group-hover:grayscale-0 transition-all duration-700"
+                            className="w-full h-full object-cover object-[center_20%] grayscale group-hover:grayscale-0 group-active:grayscale-0 transition-all duration-700"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60" />
                     </div>
