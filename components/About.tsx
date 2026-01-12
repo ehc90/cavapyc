@@ -56,7 +56,7 @@ export default function About() {
 
                     <div className="space-y-4 text-slate-400 font-light">
                         <p>
-                            Soy <strong>Emiliano</strong>. Junto a mi socio Fabián (<em>"El Centauro"</em>), fundamos <strong>Príncipe y Centauro</strong> para unir dos mundos: la excelencia técnica y la fuerza de la tradición.
+                            Soy <strong>Emiliano</strong> y junto a Fabián (<em>"El Centauro"</em>), fundamos <strong>Príncipe y Centauro</strong> para unir dos mundos: donde la elegancia refinada se encuentra con el vigor apasionado.
                         </p>
                         <p>
                             Este espacio digital es mi bitácora personal. Mientras Fabián sostiene los cimientos de nuestra visión, yo me dedico a explorar, catar y compartir contigo esas joyas enológicas que merecen ser descubiertas.
