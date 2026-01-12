@@ -1,8 +1,6 @@
-'use client';
-
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Quote } from 'lucide-react';
+import { Quote, ArrowRight } from 'lucide-react';
 
 export default function About() {
     return (
@@ -20,11 +18,11 @@ export default function About() {
                     transition={{ duration: 0.8 }}
                     className="w-full md:w-1/2 relative group"
                 >
-                    <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-800 aspect-[3/4] md:aspect-square">
+                    <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-800 aspect-[3/4]">
                         <img
                             src="https://tpoeahzwujcghqsjanon.supabase.co/storage/v1/object/public/ImagenPyC/PrincipePyC.jpg"
                             alt="Emiliano - El Príncipe"
-                            className="w-full h-full object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-700"
+                            className="w-full h-full object-cover object-[center_20%] grayscale group-hover:grayscale-0 transition-all duration-700"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent opacity-60" />
                     </div>
@@ -63,7 +61,11 @@ export default function About() {
                         </p>
                     </div>
 
-                    <div className="pt-4">
+                    <div className="pt-6 flex flex-col sm:flex-row gap-6 items-center">
+                        <button className="px-8 py-3 bg-slate-800 hover:bg-slate-700 text-amber-500 border border-amber-900/50 rounded-full transition-all text-sm tracking-wider uppercase flex items-center gap-2 group">
+                            <span>Ir a Bitácora de Viaje</span>
+                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </button>
                         <img
                             src="/logo-hero.png"
                             alt="Firma"
