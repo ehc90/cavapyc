@@ -9,28 +9,39 @@ import { Plus, Edit2, Trash2, Save, X, Sparkles, LogOut, Wine } from 'lucide-rea
 
 export default function AdminDashboard() {
     const router = useRouter();
-    const [items, setItems] = useState<WineItem[]>([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [aiLoading, setAiLoading] = useState(false);
-
-    // Form State
-    const [formData, setFormData] = useState<Partial<WineItem>>({});
+    const [activeTab, setActiveTab] = useState<'wines' | 'members'>('wines');
+    const [members, setMembers] = useState<any[]>([]);
 
     useEffect(() => {
         if (!sessionStorage.getItem('isAdmin')) router.push('/admin');
 
-        // Subscribe to data
-        const q = query(collection(db, 'cava_items')); // removed orderBy for simplicity if index missing
-        const unsub = onSnapshot(q, (snap) => {
+        // Subscribe to wines
+        const qWines = query(collection(db, 'cava_items'));
+        const unsubWines = onSnapshot(qWines, (snap) => {
             setItems(snap.docs.map(d => ({ id: d.id, ...d.data() } as WineItem)));
         });
-        return () => unsub();
+
+        // Subscribe to members
+        const qMembers = query(collection(db, 'club_members'), orderBy('joinedAt', 'desc'));
+        const unsubMembers = onSnapshot(qMembers, (snap) => {
+            setMembers(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+        });
+
+        return () => {
+            unsubWines();
+            unsubMembers();
+        };
     }, [router]);
 
     const handleLogout = () => {
         sessionStorage.removeItem('isAdmin');
         router.push('/admin');
+    };
+
+    const copyEmails = () => {
+        const emails = members.map(m => m.email).join(', ');
+        navigator.clipboard.writeText(emails);
+        alert('Correos copiados al portapapeles');
     };
 
     const openModal = (item?: WineItem) => {
@@ -98,15 +109,34 @@ export default function AdminDashboard() {
         <div className="min-h-screen bg-slate-950 text-slate-100 p-6 md:p-10 font-sans">
 
             {/* Header */}
-            <div className="max-w-7xl mx-auto flex justify-between items-center mb-10">
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
                 <div>
                     <h1 className="text-3xl font-serif font-bold text-amber-500">Panel de Control</h1>
                     <p className="text-slate-500 text-sm">Gestionando la Colección Privada</p>
                 </div>
-                <div className="flex gap-4">
-                    <button onClick={() => openModal()} className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold transition-colors">
-                        <Plus className="w-4 h-4" /> Nuevo Vino
+
+                {/* Tabs */}
+                <div className="flex bg-slate-900 p-1 rounded-lg border border-slate-800">
+                    <button
+                        onClick={() => setActiveTab('wines')}
+                        className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${activeTab === 'wines' ? 'bg-amber-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
+                    >
+                        Vinos
                     </button>
+                    <button
+                        onClick={() => setActiveTab('members')}
+                        className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${activeTab === 'members' ? 'bg-amber-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
+                    >
+                        Socios
+                    </button>
+                </div>
+
+                <div className="flex gap-4">
+                    {activeTab === 'wines' && (
+                        <button onClick={() => openModal()} className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold transition-colors">
+                            <Plus className="w-4 h-4" /> Nuevo Vino
+                        </button>
+                    )}
                     <button onClick={handleLogout} className="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
                         <LogOut className="w-4 h-4" /> Salir
                     </button>
@@ -115,36 +145,70 @@ export default function AdminDashboard() {
 
             {/* Table/List */}
             <div className="max-w-7xl mx-auto bg-slate-900 rounded-xl border border-slate-800 overflow-hidden shadow-xl">
-                <div className="overflow-x-auto">
-                    <table className="w-full text-left">
-                        <thead className="bg-slate-950 text-slate-400 uppercase text-xs tracking-wider">
-                            <tr>
-                                <th className="p-4">Vino</th>
-                                <th className="p-4">Tipo</th>
-                                <th className="p-4">Bodega</th>
-                                <th className="p-4 text-right">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody className="divide-y divide-slate-800">
-                            {items.map(item => (
-                                <tr key={item.id} className="hover:bg-slate-800/50 transition-colors">
-                                    <td className="p-4 flex items-center gap-3">
-                                        {item.image ? <img src={item.image} className="w-10 h-10 object-cover rounded-md" /> : <div className="w-10 h-10 bg-slate-800 rounded-md flex items-center justify-center"><Wine className="w-5 h-5 text-slate-600" /></div>}
-                                        <span className="font-bold text-slate-200">{item.name}</span>
-                                    </td>
-                                    <td className="p-4"><span className="text-xs uppercase bg-slate-800 text-amber-500 px-2 py-1 rounded border border-slate-700">{item.type}</span></td>
-                                    <td className="p-4 text-slate-400">{item.producer || '-'}</td>
-                                    <td className="p-4 text-right">
-                                        <div className="flex justify-end gap-2">
-                                            <button onClick={() => openModal(item)} className="p-2 bg-blue-500/10 text-blue-400 hover:bg-blue-500 hover:text-white rounded transition-colors"><Edit2 className="w-4 h-4" /></button>
-                                            <button onClick={() => handleDelete(item.id)} className="p-2 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white rounded transition-colors"><Trash2 className="w-4 h-4" /></button>
-                                        </div>
-                                    </td>
+                {activeTab === 'wines' ? (
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left">
+                            <thead className="bg-slate-950 text-slate-400 uppercase text-xs tracking-wider">
+                                <tr>
+                                    <th className="p-4">Vino</th>
+                                    <th className="p-4">Tipo</th>
+                                    <th className="p-4">Bodega</th>
+                                    <th className="p-4 text-right">Acciones</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
+                            </thead>
+                            <tbody className="divide-y divide-slate-800">
+                                {items.map(item => (
+                                    <tr key={item.id} className="hover:bg-slate-800/50 transition-colors">
+                                        <td className="p-4 flex items-center gap-3">
+                                            {item.image ? <img src={item.image} className="w-10 h-10 object-cover rounded-md" /> : <div className="w-10 h-10 bg-slate-800 rounded-md flex items-center justify-center"><Wine className="w-5 h-5 text-slate-600" /></div>}
+                                            <span className="font-bold text-slate-200">{item.name}</span>
+                                        </td>
+                                        <td className="p-4"><span className="text-xs uppercase bg-slate-800 text-amber-500 px-2 py-1 rounded border border-slate-700">{item.type}</span></td>
+                                        <td className="p-4 text-slate-400">{item.producer || '-'}</td>
+                                        <td className="p-4 text-right">
+                                            <div className="flex justify-end gap-2">
+                                                <button onClick={() => openModal(item)} className="p-2 bg-blue-500/10 text-blue-400 hover:bg-blue-500 hover:text-white rounded transition-colors"><Edit2 className="w-4 h-4" /></button>
+                                                <button onClick={() => handleDelete(item.id)} className="p-2 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white rounded transition-colors"><Trash2 className="w-4 h-4" /></button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                ) : (
+                    // Members Table
+                    <div className="overflow-x-auto">
+                        <div className="p-4 bg-slate-950 border-b border-slate-800 flex justify-between items-center">
+                            <h3 className="text-slate-300 font-bold">Listado de Socios ({members.length})</h3>
+                            <button onClick={copyEmails} className="text-xs text-amber-500 hover:text-white transition-colors border border-amber-500/30 px-3 py-1 rounded">
+                                Copiar Emails
+                            </button>
+                        </div>
+                        <table className="w-full text-left">
+                            <thead className="bg-slate-950 text-slate-400 uppercase text-xs tracking-wider">
+                                <tr>
+                                    <th className="p-4">Email</th>
+                                    <th className="p-4">Fecha de Alta</th>
+                                    <th className="p-4">Origen</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-800">
+                                {members.length === 0 ? (
+                                    <tr><td colSpan={3} className="p-8 text-center text-slate-500">Aún no hay socios registrados.</td></tr>
+                                ) : members.map((member) => (
+                                    <tr key={member.id} className="hover:bg-slate-800/50 transition-colors">
+                                        <td className="p-4 font-mono text-slate-300">{member.email}</td>
+                                        <td className="p-4 text-slate-400 text-sm">
+                                            {member.joinedAt?.seconds ? new Date(member.joinedAt.seconds * 1000).toLocaleDateString() : 'Reciente'}
+                                        </td>
+                                        <td className="p-4 text-slate-500 text-sm">{member.source || 'Web'}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
             </div>
 
             {/* Modal */}
