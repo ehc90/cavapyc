@@ -44,7 +44,7 @@ export default function BlogListing() {
                             <img
                                 src="https://tpoeahzwujcghqsjanon.supabase.co/storage/v1/object/public/ImagenPyC/PrincipePyC.jpg"
                                 alt="El Príncipe"
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover object-[center_20%]"
                             />
                         </div>
                     </div>
