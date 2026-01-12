@@ -35,16 +35,25 @@ export default function BlogListing() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1 }}
-                    className="relative z-10"
+                    className="relative z-10 flex flex-col items-center"
                 >
-                    <div className="flex justify-center mb-6">
-                        <Anchor className="w-12 h-12 text-amber-600 opacity-80" strokeWidth={1} />
+                    {/* User Image with Liquid Border */}
+                    <div className="relative w-24 h-24 mb-6 group">
+                        <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 via-purple-600 to-amber-500 rounded-full opacity-75 group-hover:opacity-100 blur animate-spin transition duration-1000"></div>
+                        <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-slate-900">
+                            <img
+                                src="https://tpoeahzwujcghqsjanon.supabase.co/storage/v1/object/public/ImagenPyC/PrincipePyC.jpg"
+                                alt="El Príncipe"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
                     </div>
+
                     <h1 className="text-5xl md:text-7xl font-bold text-slate-900 mb-6 tracking-tight">
                         Bitácora del Príncipe
                     </h1>
-                    <p className="max-w-2xl mx-auto text-xl text-slate-600 italic leading-relaxed">
-                        "Un viaje de mil millas comienza con un solo descorche. Crónicas de ultramar y hallazgos enológicos."
+                    <p className="max-w-3xl mx-auto text-xl text-slate-600 italic leading-relaxed">
+                        "Crónicas de un sommelier en movimiento. Desde los viñedos de Mendoza hasta los rincones más lejanos del mundo. Cada destino, una copa; cada bodega, una historia."
                     </p>
                 </motion.div>
             </header>
