@@ -5,10 +5,33 @@ const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemi
 
 export async function POST(req: Request) {
     try {
-        const { prompt } = await req.json();
+        const { prompt, image } = await req.json();
 
         if (!GEMINI_API_KEY) {
             return NextResponse.json({ error: 'API Key not configured' }, { status: 500 });
+        }
+
+        const parts: any[] = [{ text: prompt }];
+
+        // If image URL provided, fetch and add to payload
+        if (image) {
+            try {
+                const imgRes = await fetch(image);
+                const arrayBuffer = await imgRes.arrayBuffer();
+                const base64 = Buffer.from(arrayBuffer).toString('base64');
+                const mimeType = imgRes.headers.get('content-type') || 'image/jpeg';
+
+                parts.push({
+                    inline_data: {
+                        mime_type: mimeType,
+                        data: base64
+                    }
+                });
+            } catch (err) {
+                console.error("Error fetching image for AI:", err);
+                // Continue without image if fetch fails, or throw? better to continue with text only but warn.
+                parts.push({ text: "\n[Nota: No se pudo analizar la imagen proporcionada, se generará solo con texto.]" });
+            }
         }
 
         const response = await fetch(GEMINI_URL, {
@@ -17,9 +40,7 @@ export async function POST(req: Request) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                contents: [{
-                    parts: [{ text: prompt }]
-                }]
+                contents: [{ parts }]
             })
         });
 
