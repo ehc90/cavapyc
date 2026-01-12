@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     images: ['https://tpoeahzwujcghqsjanon.supabase.co/storage/v1/object/public/ImagenPyC/PrincipePyC.jpg'],
   },
   icons: {
-    icon: '/favicon.ico', // Assuming you have one, or we can use the logo
+    icon: '/logo-hero.png',
     shortcut: '/logo-hero.png',
     apple: '/logo-hero.png',
   },

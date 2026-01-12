@@ -50,7 +50,7 @@ export default function BlogListing() {
                     </div>
 
                     <h1 className="text-5xl md:text-7xl font-bold text-slate-900 mb-6 tracking-tight">
-                        Bitácora del Príncipe
+                        La Bitácora del Príncipe
                     </h1>
                     <p className="max-w-3xl mx-auto text-xl text-slate-600 italic leading-relaxed">
                         "Crónicas de un sommelier en movimiento. Desde los viñedos de Mendoza hasta los rincones más lejanos del mundo. Cada destino, una copa; cada bodega, una historia."
