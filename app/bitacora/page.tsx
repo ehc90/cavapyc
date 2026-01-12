@@ -38,7 +38,7 @@ export default function BlogListing() {
                     className="relative z-10 flex flex-col items-center"
                 >
                     {/* User Image with Liquid Border */}
-                    <div className="relative w-32 h-32 mb-6 group">
+                    <div className="relative w-40 h-40 mb-6 group">
                         <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 via-purple-600 to-amber-500 rounded-full opacity-75 group-hover:opacity-100 blur animate-spin transition duration-1000"></div>
                         <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-slate-900">
                             <img
