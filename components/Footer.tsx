@@ -16,9 +16,9 @@ export default function Footer() {
 
                 {/* Social Icons */}
                 <div className="flex gap-8 mb-12">
-                    <SocialIcon href="https://instagram.com" icon={<Instagram />} label="Instagram" />
-                    <SocialIcon href="https://wa.me/your-number" icon={<Phone />} label="WhatsApp" />
-                    <SocialIcon href="mailto:contacto@principeycentauro.com" icon={<Mail />} label="Email" />
+                    <SocialIcon href="https://instagram.com" icon={<Instagram strokeWidth={1.5} className="w-6 h-6" />} label="Instagram" />
+                    <SocialIcon href="https://wa.me/your-number" icon={<Phone strokeWidth={1.5} className="w-6 h-6" />} label="WhatsApp" />
+                    <SocialIcon href="mailto:contacto@principeycentauro.com" icon={<Mail strokeWidth={1.5} className="w-6 h-6" />} label="Email" />
                 </div>
 
                 {/* Copyright */}
@@ -42,7 +42,7 @@ function SocialIcon({ href, icon, label }: { href: string; icon: React.ReactNode
             className="w-12 h-12 flex items-center justify-center rounded-full border border-amber-600/30 text-amber-500 hover:bg-amber-900/20 hover:border-amber-500 transition-all duration-300"
             aria-label={label}
         >
-            {React.cloneElement(icon as React.ReactElement, { strokeWidth: 1.5, className: "w-6 h-6" })}
+            {icon}
         </motion.a>
     );
 }
