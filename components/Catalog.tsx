@@ -19,6 +19,7 @@ export default function Catalog() {
     const [items, setItems] = useState<WineItem[]>([]);
     const [filter, setFilter] = useState('todos');
     const [loading, setLoading] = useState(true);
+    const [zoomImage, setZoomImage] = useState<string | null>(null);
 
     useEffect(() => {
         // Real-time subscription to 'cava_items'
@@ -84,7 +85,7 @@ export default function Catalog() {
                                         className="group bg-slate-900/50 rounded-2xl overflow-hidden border border-slate-800 hover:border-amber-700/50 transition-colors shadow-xl hover:shadow-2xl hover:shadow-amber-900/10"
                                     >
                                         {/* Image */}
-                                        <div className="relative h-64 overflow-hidden bg-slate-800">
+                                        <div className="relative h-64 overflow-hidden bg-slate-800 cursor-zoom-in" onClick={() => setZoomImage(item.image || null)}>
                                             {item.image ? (
                                                 <img
                                                     src={item.image}
@@ -145,6 +146,23 @@ export default function Catalog() {
                     )}
                 </div>
             </div>
+
+            {/* Image Zoom Modal */}
+            <AnimatePresence>
+                {zoomImage && (
+                    <motion.div
+                        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                        onClick={() => setZoomImage(null)}
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 cursor-zoom-out"
+                    >
+                        <motion.img
+                            initial={{ scale: 0.9 }} animate={{ scale: 1 }}
+                            src={zoomImage}
+                            className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl border border-slate-800"
+                        />
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </section>
     );
 }
