@@ -5,7 +5,7 @@ import { collection, query, onSnapshot } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { WineItem } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Star, Wine, Search, Filter } from 'lucide-react';
+import { Star, Wine } from 'lucide-react';
 
 const categories = [
     { id: 'todos', label: 'Todos' },
