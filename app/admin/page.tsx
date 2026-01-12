@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Wine, Lock } from 'lucide-react';
+import Link from 'next/link';
+import { Wine, Lock, Home } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function AdminLogin() {
@@ -23,7 +23,17 @@ export default function AdminLogin() {
     };
 
     return (
-        <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
+        <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6 relative">
+            {/* Back to Home Button */}
+            <Link href="/" className="absolute top-8 left-8 z-30 flex items-center gap-2 text-slate-500 hover:text-amber-500 transition-colors group">
+                <div className="p-2 rounded-full border border-slate-800 bg-slate-900 group-hover:border-amber-500/50 transition-colors">
+                    <Home className="w-5 h-5" />
+                </div>
+                <span className="text-xs font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity -translate-x-2 group-hover:translate-x-0">
+                    Volver al Inicio
+                </span>
+            </Link>
+
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-amber-900/10 via-slate-950 to-slate-950" />
 
             <motion.div
