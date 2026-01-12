@@ -38,7 +38,7 @@ export default function BlogListing() {
                     className="relative z-10 flex flex-col items-center"
                 >
                     {/* User Image with Liquid Border */}
-                    <div className="relative w-24 h-24 mb-6 group">
+                    <div className="relative w-32 h-32 mb-6 group">
                         <div className="absolute -inset-1 bg-gradient-to-r from-amber-500 via-purple-600 to-amber-500 rounded-full opacity-75 group-hover:opacity-100 blur animate-spin transition duration-1000"></div>
                         <div className="relative w-full h-full rounded-full overflow-hidden border-2 border-slate-900">
                             <img
@@ -125,7 +125,7 @@ export default function BlogListing() {
             {/* Footer Simple */}
             <footer className="py-12 text-center border-t border-amber-900/10 mt-12">
                 <Link href="/" className="inline-block px-8 py-3 border border-slate-300 rounded-full text-slate-500 hover:text-amber-700 hover:border-amber-700 hover:bg-amber-50 transition-all text-xs uppercase tracking-widest font-sans font-bold">
-                    Volver a Príncipe y Centauro
+                    Volver a la Cava del Príncipe
                 </Link>
             </footer>
         </div>
