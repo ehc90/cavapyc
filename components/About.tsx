@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Quote, ArrowRight } from 'lucide-react';
+import { Quote, ArrowRight, Sparkles } from 'lucide-react';
 
 export default function About() {
     return (
@@ -63,16 +64,17 @@ export default function About() {
                         </p>
                     </div>
 
-                    <div className="pt-6 flex flex-col sm:flex-row gap-6 items-center">
-                        <button className="px-8 py-3 bg-slate-800 hover:bg-slate-700 text-amber-500 border border-amber-900/50 rounded-full transition-all text-sm tracking-wider uppercase flex items-center gap-2 group">
-                            <span>Ir a Bitácora de Viaje</span>
-                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                        </button>
-                        <img
-                            src="/logo-hero.png"
-                            alt="Firma"
-                            className="h-16 opacity-50 invert mix-blend-screen"
-                        />
+                    <div className="pt-8">
+                        <Link href="/bitacora">
+                            <button className="relative inline-flex h-12 overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-2 focus:ring-offset-slate-950">
+                                <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#F59E0B_0%,#393BB2_50%,#F59E0B_100%)]" />
+                                <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-full bg-slate-950 px-8 py-1 text-sm font-medium text-amber-500 backdrop-blur-3xl transition-all hover:bg-slate-900 gap-2">
+                                    <Sparkles className="w-4 h-4 text-amber-300" />
+                                    <span>Explorar Bitácora de Viaje</span>
+                                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                                </span>
+                            </button>
+                        </Link>
                     </div>
                 </motion.div>
 
