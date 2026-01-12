@@ -23,5 +23,7 @@ export interface BlogPost {
     date: Date | any;
     tags?: string[];
     slug?: string;
+    relatedWineId?: string;
     createdAt?: Date | any;
+    likes?: number;
 }

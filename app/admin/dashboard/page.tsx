@@ -476,6 +476,22 @@ export default function AdminDashboard() {
                             </div>
 
                             <div>
+                                <label className="block text-xs uppercase text-slate-500 mb-1">Vino Protagonista (Opcional)</label>
+                                <select
+                                    className="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white text-sm"
+                                    value={blogFormData.relatedWineId || ''}
+                                    onChange={e => setBlogFormData({ ...blogFormData, relatedWineId: e.target.value })}
+                                >
+                                    <option value="">-- Seleccionar Vino de la Cava --</option>
+                                    {items.map(wine => (
+                                        <option key={wine.id} value={wine.id}>
+                                            {wine.name} ({wine.producer})
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div>
                                 <div className="flex justify-between items-center mb-1">
                                     <label className="block text-xs uppercase text-slate-500">Cuerpo del Texto</label>
                                     <button type="button" onClick={generateBlogAI} disabled={aiLoading} className="text-amber-500 text-xs hover:text-amber-400 flex items-center gap-1"><Sparkles className="w-3 h-3" /> Inspirar con IA</button>

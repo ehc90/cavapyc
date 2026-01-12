@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { doc, getDoc, updateDoc, increment } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import { BlogPost } from '@/types';
+import { BlogPost, WineItem } from '@/types';
 import Link from 'next/link';
 import { ArrowLeft, Calendar, Share2, Wine } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -12,6 +12,7 @@ import { motion } from 'framer-motion';
 export default function BlogPostPage() {
     const { id } = useParams();
     const [post, setPost] = useState<BlogPost | null>(null);
+    const [relatedWine, setRelatedWine] = useState<WineItem | null>(null);
     const [loading, setLoading] = useState(true);
     const [likes, setLikes] = useState(0);
     const [hasLiked, setHasLiked] = useState(false);
@@ -21,10 +22,21 @@ export default function BlogPostPage() {
         const fetchPost = async () => {
             const docRef = doc(db, 'blog_posts', id as string);
             const docSnap = await getDoc(docRef);
+
             if (docSnap.exists()) {
                 const data = docSnap.data();
-                setPost({ id: docSnap.id, ...data } as BlogPost);
+                const postData = { id: docSnap.id, ...data } as BlogPost;
+                setPost(postData);
                 setLikes(data.likes || 0);
+
+                // Fetch Related Wine if exists
+                if (data.relatedWineId) {
+                    const wineRef = doc(db, 'cava_items', data.relatedWineId);
+                    const wineSnap = await getDoc(wineRef);
+                    if (wineSnap.exists()) {
+                        setRelatedWine({ id: wineSnap.id, ...wineSnap.data() } as WineItem);
+                    }
+                }
             }
             setLoading(false);
         };
@@ -114,6 +126,26 @@ export default function BlogPostPage() {
                             <p key={i}>{paragraph}</p>
                         ))}
                     </div>
+
+                    {/* Featured Wine */}
+                    {relatedWine && (
+                        <div className="mt-12 mb-8 p-6 bg-slate-900 rounded-xl border border-amber-900/30 text-center relative overflow-hidden group">
+                            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10" />
+                            <div className="relative z-10 flex flex-col md:flex-row items-center gap-6">
+                                <div className="w-24 h-24 rounded-full overflow-hidden border-2 border-amber-500 shadow-lg shrink-0">
+                                    <img src={relatedWine.image || '/bottle-placeholder.png'} className="w-full h-full object-cover" alt={relatedWine.name} />
+                                </div>
+                                <div className="text-left flex-1">
+                                    <p className="text-amber-500 text-xs uppercase tracking-widest mb-1">Copa del Relato</p>
+                                    <h3 className="text-xl font-bold text-white font-serif">{relatedWine.name}</h3>
+                                    <p className="text-slate-400 text-sm italic">{relatedWine.producer} — {relatedWine.type}</p>
+                                </div>
+                                <Link href="/catalogo" className="px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-sm font-bold uppercase tracking-wider transition-colors">
+                                    Ver en Cava
+                                </Link>
+                            </div>
+                        </div>
+                    )}
 
                     <div className="mt-12 pt-8 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-6 text-slate-400 text-sm font-sans">
                         <span className="italic">Escrito por El Príncipe</span>
