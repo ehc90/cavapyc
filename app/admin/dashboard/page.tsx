@@ -181,6 +181,12 @@ export default function AdminDashboard() {
                     >
                         Socios
                     </button>
+                    <button
+                        onClick={() => setActiveTab('blog')}
+                        className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${activeTab === 'blog' ? 'bg-amber-600 text-white shadow' : 'text-slate-400 hover:text-white'}`}
+                    >
+                        Bitácora
+                    </button>
                 </div>
 
                 <div className="flex gap-4">
