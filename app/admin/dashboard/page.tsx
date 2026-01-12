@@ -16,8 +16,11 @@ export default function AdminDashboard() {
     const [formData, setFormData] = useState<Partial<WineItem>>({});
 
     // Tab State
-    const [activeTab, setActiveTab] = useState<'wines' | 'members'>('wines');
+    const [activeTab, setActiveTab] = useState<'wines' | 'members' | 'blog'>('wines');
     const [members, setMembers] = useState<any[]>([]);
+    const [posts, setPosts] = useState<any[]>([]);
+    const [blogFormData, setBlogFormData] = useState<any>({});
+    const [isBlogModalOpen, setIsBlogModalOpen] = useState(false);
 
     useEffect(() => {
         if (!sessionStorage.getItem('isAdmin')) router.push('/admin');
@@ -186,6 +189,11 @@ export default function AdminDashboard() {
                             <Plus className="w-4 h-4" /> Nuevo Vino
                         </button>
                     )}
+                    {activeTab === 'blog' && (
+                        <button onClick={() => openBlogModal()} className="bg-amber-600 hover:bg-amber-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold transition-colors">
+                            <Plus className="w-4 h-4" /> Nuevo Post
+                        </button>
+                    )}
                     <button onClick={handleLogout} className="bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2 rounded-lg flex items-center gap-2 transition-colors">
                         <LogOut className="w-4 h-4" /> Salir
                     </button>
@@ -252,6 +260,45 @@ export default function AdminDashboard() {
                                             {member.joinedAt?.seconds ? new Date(member.joinedAt.seconds * 1000).toLocaleDateString() : 'Reciente'}
                                         </td>
                                         <td className="p-4 text-slate-500 text-sm">{member.source || 'Web'}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+
+                {/* BLOG TAB */}
+                {activeTab === 'blog' && (
+                    <div className="overflow-x-auto">
+                        <div className="p-4 bg-slate-950 border-b border-slate-800 flex justify-between items-center">
+                            <h3 className="text-slate-300 font-bold">Entradas de Bitácora ({posts.length})</h3>
+                        </div>
+                        <table className="w-full text-left">
+                            <thead className="bg-slate-950 text-slate-400 uppercase text-xs tracking-wider">
+                                <tr>
+                                    <th className="p-4">Título</th>
+                                    <th className="p-4">Fecha</th>
+                                    <th className="p-4 text-right">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-800">
+                                {posts.map(post => (
+                                    <tr key={post.id} className="hover:bg-slate-800/50 transition-colors">
+                                        <td className="p-4">
+                                            <div className="flex items-center gap-3">
+                                                {post.image && <img src={post.image} className="w-12 h-8 object-cover rounded" />}
+                                                <span className="font-bold text-slate-200">{post.title}</span>
+                                            </div>
+                                        </td>
+                                        <td className="p-4 text-slate-400 text-sm">
+                                            {post.date?.seconds ? new Date(post.date.seconds * 1000).toLocaleDateString() : 'Sin fecha'}
+                                        </td>
+                                        <td className="p-4 text-right">
+                                            <div className="flex justify-end gap-2">
+                                                <button onClick={() => openBlogModal(post)} className="p-2 bg-blue-500/10 text-blue-400 hover:bg-blue-500 hover:text-white rounded transition-colors"><Edit2 className="w-4 h-4" /></button>
+                                                <button onClick={() => handleDelete(post.id)} className="p-2 bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white rounded transition-colors"><Trash2 className="w-4 h-4" /></button>
+                                            </div>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -329,6 +376,53 @@ export default function AdminDashboard() {
                             <button type="button" onClick={() => setIsModalOpen(false)} className="px-4 py-2 text-slate-400 hover:text-white transition-colors">Cancelar</button>
                             <button type="submit" disabled={loading} className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg font-bold shadow-lg flex items-center gap-2">
                                 {loading ? 'Guardando...' : <><Save className="w-4 h-4" /> Guardar Ficha</>}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            )}
+
+            {/* BLOG Post Modal */}
+            {isBlogModalOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                    <form onSubmit={handleBlogSubmit} className="bg-slate-900 border border-slate-700 rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col">
+                        <div className="p-6 border-b border-slate-800 flex justify-between items-center sticky top-0 bg-slate-900 z-10">
+                            <h2 className="text-xl font-serif font-bold text-white">{blogFormData.id ? 'Editar Entrada' : 'Nueva Noticia de Viaje'}</h2>
+                            <button type="button" onClick={() => setIsBlogModalOpen(false)}><X className="text-slate-500 hover:text-white" /></button>
+                        </div>
+
+                        <div className="p-6 grid grid-cols-1 gap-4">
+                            <div>
+                                <label className="block text-xs uppercase text-slate-500 mb-1">Título</label>
+                                <input required className="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white" value={blogFormData.title} onChange={e => setBlogFormData({ ...blogFormData, title: e.target.value })} />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-xs uppercase text-slate-500 mb-1">Fecha</label>
+                                    <input type="date" required className="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white" value={blogFormData.date} onChange={e => setBlogFormData({ ...blogFormData, date: e.target.value })} />
+                                </div>
+                                <div>
+                                    <label className="block text-xs uppercase text-slate-500 mb-1">Etiquetas (sep. por comas)</label>
+                                    <input className="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white" placeholder="Crucero, Italia, Vino..." value={blogFormData.tags} onChange={e => setBlogFormData({ ...blogFormData, tags: e.target.value })} />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="block text-xs uppercase text-slate-500 mb-1">Imagen de Portada (URL)</label>
+                                <input placeholder="https://..." className="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white text-sm" value={blogFormData.image} onChange={e => setBlogFormData({ ...blogFormData, image: e.target.value })} />
+                            </div>
+
+                            <div>
+                                <label className="block text-xs uppercase text-slate-500 mb-1">Cuerpo del Texto</label>
+                                <textarea required rows={10} className="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white text-sm font-serif leading-relaxed" placeholder="Escribe aquí tus memorias..." value={blogFormData.content} onChange={e => setBlogFormData({ ...blogFormData, content: e.target.value })} />
+                            </div>
+                        </div>
+
+                        <div className="p-6 border-t border-slate-800 flex justify-end gap-3 sticky bottom-0 bg-slate-900 z-10">
+                            <button type="button" onClick={() => setIsBlogModalOpen(false)} className="px-4 py-2 text-slate-400 hover:text-white transition-colors">Cancelar</button>
+                            <button type="submit" disabled={loading} className="bg-amber-600 hover:bg-amber-700 text-white px-6 py-2 rounded-lg font-bold shadow-lg flex items-center gap-2">
+                                {loading ? 'Publicando...' : <><Save className="w-4 h-4" /> Publicar Entrada</>}
                             </button>
                         </div>
                     </form>
