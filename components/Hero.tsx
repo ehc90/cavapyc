@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, ChevronDown } from 'lucide-react';
+import { ArrowRight, ChevronDown, Lock } from 'lucide-react';
 
 export default function Hero() {
     const scrollToCollection = () => {
@@ -11,6 +12,13 @@ export default function Hero() {
 
     return (
         <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-slate-950 text-slate-100 selection:bg-amber-900 selection:text-white">
+
+            {/* Admin Access */}
+            <div className="absolute top-6 right-6 z-50">
+                <Link href="/admin">
+                    <Lock className="w-4 h-4 text-slate-800 hover:text-amber-900/50 transition-colors cursor-pointer" />
+                </Link>
+            </div>
 
             {/* Background Ambience */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-amber-900/10 via-slate-950 to-slate-950" />
