@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Instagram, Phone, Mail } from 'lucide-react';
+import { Instagram, Phone, Globe } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Footer() {
@@ -36,7 +36,7 @@ export default function Footer() {
                         }
                         label="WhatsApp"
                     />
-                    <SocialIcon href="mailto:info@principeycentauro.com" icon={<Mail strokeWidth={1.5} className="w-6 h-6" />} label="Email" />
+                    <SocialIcon href="https://principeycentauro.com/" icon={<Globe strokeWidth={1.5} className="w-6 h-6" />} label="Web Oficial" />
                 </div>
 
                 {/* Copyright */}
