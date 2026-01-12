@@ -476,7 +476,10 @@ export default function AdminDashboard() {
                             </div>
 
                             <div>
-                                <label className="block text-xs uppercase text-slate-500 mb-1">Cuerpo del Texto</label>
+                                <div className="flex justify-between items-center mb-1">
+                                    <label className="block text-xs uppercase text-slate-500">Cuerpo del Texto</label>
+                                    <button type="button" onClick={generateBlogAI} disabled={aiLoading} className="text-amber-500 text-xs hover:text-amber-400 flex items-center gap-1"><Sparkles className="w-3 h-3" /> Inspirar con IA</button>
+                                </div>
                                 <textarea required rows={10} className="w-full bg-slate-800 border border-slate-700 rounded p-2 text-white text-sm font-serif leading-relaxed" placeholder="Escribe aquí tus memorias..." value={blogFormData.content} onChange={e => setBlogFormData({ ...blogFormData, content: e.target.value })} />
                             </div>
                         </div>
