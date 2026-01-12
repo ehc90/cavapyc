@@ -32,12 +32,23 @@ export default function Hero() {
                     transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
                     className="mb-8 relative group"
                 >
-                    <div className="relative w-48 h-48 md:w-64 md:h-64 filter drop-shadow-[0_0_15px_rgba(245,158,11,0.3)] transition-all duration-700 group-hover:drop-shadow-[0_0_25px_rgba(245,158,11,0.5)]">
-                        <img
-                            src="/logo-hero.png"
-                            alt="Príncipe y Centauro Emblem"
-                            className="w-full h-full object-contain invert mix-blend-screen"
-                        />
+                    <div className="relative w-32 h-32 md:w-40 md:h-40 filter drop-shadow-[0_0_15px_rgba(245,158,11,0.5)] transition-all duration-700 group-hover:drop-shadow-[0_0_30px_rgba(245,158,11,0.8)]">
+                        <svg
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#fbbf24"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="w-full h-full"
+                        >
+                            <motion.path
+                                initial={{ pathLength: 0 }}
+                                animate={{ pathLength: 1 }}
+                                transition={{ duration: 2, ease: "easeInOut" }}
+                                d="m2 4 3 12h14l3-12-6 7-4-7-4 7-6-7zm3 16h14"
+                            />
+                        </svg>
                     </div>
                 </motion.div>
 
